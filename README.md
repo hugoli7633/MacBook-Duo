@@ -2,6 +2,14 @@
 
 根据 MacBook 屏幕开合角度，为内建屏幕桌面添加渐变模糊与透视效果的原生 macOS 实验应用。使用 SwiftUI、AppKit、ScreenCaptureKit 和 Metal，无第三方包依赖。
 
+## 动态预览
+
+![MacBook Duo 开合与渐变模糊演示](docs/images/settings-preview.gif)
+
+10 秒循环演示：屏幕低于 90° 后逐渐模糊，展开后恢复清晰。GIF 使用示例壁纸，与应用共用开合曲线、角度阈值和 Metal 着色器；机身动画采用离线透视合成，并非设置窗口录屏。应用内预览可显示授权后的真实桌面快照。
+
+[重新生成演示动画](docs/PREVIEW.md)
+
 ## 功能
 
 - 自定义开始模糊角度（默认 90°），展开后恢复清晰。
