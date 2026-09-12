@@ -1,0 +1,24 @@
+# Build products
+.build/
+*.app/
+*.dSYM/
+*.zip
+*.dmg
+*.pkg
+
+# macOS and editors
+.DS_Store
+._*
+.idea/
+.vscode/
+*.xcuserstate
+xcuserdata/
+
+# Local configuration and signing material
+.env
+.env.*
+!.env.example
+*.p12
+*.p8
+*.mobileprovision
+*.provisionprofile
