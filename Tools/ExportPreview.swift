@@ -14,7 +14,11 @@ struct ExportPreview {
         let source = photo.cgImage(forProposedRect: &bounds, context: nil, hints: nil)!
         let lid = source.cropping(to: CGRect(x:460,y:274,width:280,height:190))!
         let base = source.cropping(to: CGRect(x:428,y:464,width:342,height:16))!
-        let wallpaper = source.cropping(to: CGRect(x:466,y:284,width:268,height:174))!
+        // Apple public desktop demo: menu bar, widgets, Music window and Dock.
+        let desktopURL = root.appendingPathComponent("docs/images/macos-tahoe-desktop-source.jpg")
+        let desktopSource = CGImageSourceCreateWithURL(desktopURL as CFURL, nil)!
+        let desktopPhoto = CGImageSourceCreateImageAtIndex(desktopSource, 0, nil)!
+        let desktop = desktopPhoto.cropping(to: CGRect(x:106,y:101,width:1748,height:1136))!
         let device = MTLCreateSystemDefaultDevice()!
         let queue = device.makeCommandQueue()!
         let library = try device.makeLibrary(source: GlassMetalView.shader, options: nil)
@@ -23,7 +27,7 @@ struct ExportPreview {
         descriptor.fragmentFunction = library.makeFunction(name:"glassMain")
         descriptor.colorAttachments[0].pixelFormat = .rgba8Unorm
         let pipeline = try device.makeRenderPipelineState(descriptor:descriptor)
-        let texture = try MTKTextureLoader(device:device).newTexture(cgImage:wallpaper,options:[.SRGB:false,.generateMipmaps:true])
+        let texture = try MTKTextureLoader(device:device).newTexture(cgImage:desktop,options:[.SRGB:false,.generateMipmaps:true])
         let targetDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.rgba8Unorm,width:680,height:440,mipmapped:false)
         targetDescriptor.usage = [.renderTarget]
         targetDescriptor.storageMode = .shared
@@ -93,7 +97,7 @@ struct ExportPreview {
                 if let image=ci.createCGImage(transformed,from:CGRect(x:0,y:0,width:680,height:430)) { canvas.draw(image,in:CGRect(x:0,y:0,width:680,height:430)) }
                 canvas.draw(base,in:CGRect(x:126.25,y:93,width:427.5,height:20))
                 text("开合演示 · 低于 90° 开始模糊",40,58,13,.lightGray)
-                text("示例壁纸 · 与应用共用 Metal 渲染及动画曲线",40,35,11,.gray)
+                text("macOS Tahoe 桌面 · 实际 Metal 模糊渲染",40,35,11,.gray)
                 NSGraphicsContext.restoreGraphicsState()
                 let image=canvas.makeImage()!
                 CGImageDestinationAddImage(destination,image,[kCGImagePropertyGIFDictionary:[kCGImagePropertyGIFDelayTime:1.0/15]] as CFDictionary)
